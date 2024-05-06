@@ -14,6 +14,7 @@ export const handler: AppHandler = async (c) => {
     const zenn = z.articles.map<ListResponse[number]>((p) => {
       return {
         id: uuidV4(),
+        media: 'zenn',
         title: p.title,
         url: `${c.env.ZENN_BASE_URL}${p.path}`,
         createdAt: p.publishedAt,
@@ -24,6 +25,7 @@ export const handler: AppHandler = async (c) => {
     const qiita = q.map<ListResponse[number]>((p) => {
       return {
         id: uuidV4(),
+        media: 'qiita',
         title: p.title,
         url: p.url,
         createdAt: p.createdAt,
@@ -34,6 +36,7 @@ export const handler: AppHandler = async (c) => {
     const sizu = s.posts.filter((p) => p.visibility === 'ANYONE').map<ListResponse[number]>((p) => {
       return {
         id: uuidV4(),
+        media: 'sizu',
         title: p.title,
         url: `${c.env.SIZU_BASE_URL}/${p.slug}`,
         createdAt: p.createdAt,
