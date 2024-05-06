@@ -12,14 +12,16 @@
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "0.1.0",
     "@cloudflare/workers-types": "4.20240423.0",
+    "@types/bun": "latest",
     "typescript": "5.0.4",
     "vitest": "1.3.0",
-    "wrangler": "3.0.0",
-    "@types/bun": "latest"
+    "wrangler": "3.0.0"
   },
   "dependencies": {
-    "hono": "4.2.9"
+    "camelcase-keys": "^9.1.3",
+    "hono": "4.2.9",
+    "uuid": "9.0.1"
   },
-  "module": "src/index.ts",
+  "module": "src/main.ts",
   "type": "module"
 }

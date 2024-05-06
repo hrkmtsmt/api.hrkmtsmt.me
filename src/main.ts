@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { logger } from 'hono/logger';
 import { basicAuth } from 'hono/basic-auth';
+import { handler as articles } from './app/articles';
 import type { Bindings } from './types';
 
 const app = new Hono<{ Bindings: Bindings }>();
@@ -17,5 +18,7 @@ app.use('/*', (c, next) => {
 });
 
 app.get('/', (c) => c.json({ message: 'Hello World🔥' }));
+
+app.get('/articles', articles);
 
 export default app;
