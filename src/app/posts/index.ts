@@ -5,6 +5,8 @@ import { ListResponse, Zenn, Qiita, Sizu } from "./types";
 
 export const handler: AppHandler = async (c) => {
   try {
+    // TODO: クエリパラメータを受け付けるようにする
+
     const [z, q, s] = await Promise.all([
       fetcher<Zenn>(`${c.env.ZENN_API_URL}/articles?username=hrkmtsmt`),
       fetcher<Qiita>(`${c.env.QIITA_API_URL}/authenticated_user/items`, { Authorization: `Bearer ${c.env.QIITA_API_ACCESS_TOKEN}` }),
