@@ -1,6 +1,6 @@
 🎉 [INITIAL COMMIT]:
 
-🐛 [BUG FIX]:  
+🐛 [BUG FIX]:
 
 🔧 [FIX]:
 

@@ -1,12 +1,4 @@
 {
-  "ignorePaths": [
-    "./node_modules/**",
-    "./bun.lockb",
-    "/wrangler.toml"
-  ],
-  "words": [
-    "hrkmtsmt",
-    "hono",
-    "vitest"
-  ]
+  "ignorePaths": ["./node_modules/**", "./bun.lockb", "/wrangler.toml"],
+  "words": ["hrkmtsmt", "hono", "vitest"]
 }

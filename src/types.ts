@@ -1,4 +1,4 @@
-import { Handler } from "hono";
+import { Handler } from 'hono';
 
 export type Bindings = {
   ALLOW_ORIGIN: string;
