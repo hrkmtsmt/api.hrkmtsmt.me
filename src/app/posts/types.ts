@@ -29,7 +29,7 @@ export type Sizu = {
 };
 
 export type ListResponse = Array<{
-  id: string;
+  id: number;
   media: 'zenn' | 'qiita' | 'sizu';
   title: string;
   url: string;
