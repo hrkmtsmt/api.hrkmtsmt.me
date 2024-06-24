@@ -6,6 +6,7 @@
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
     "test": "vitest",
+    "format": "prettier --write . --config ./prettier.config.js",
     "cf-typegen": "wrangler types",
     "spell-check": "cspell '**'"
   },
