@@ -8,11 +8,13 @@ const app = new Hono<{ Bindings: Bindings }>();
 
 app.use(logger());
 
-app.use('/*', (c, next) =>
-  cors({
+app.use('/*', (c, next) => {
+  const handler = cors({
     origin: [c.env.ALLOW_ORIGIN, c.env.ALLOW_ORIGIN_LOCAL],
-  })(c, next)
-);
+  });
+
+  return handler(c, next);
+});
 
 app.use('/*', handlers.middleware);
 
