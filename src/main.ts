@@ -9,8 +9,6 @@ const app = new Hono<{ Bindings: Bindings }>();
 app.use(logger());
 
 app.use('/*', (c, next) => {
-  console.log(c.env.ALLOW_ORIGIN)
-
   const handler = cors({
     origin: [c.env.ALLOW_ORIGIN, c.env.ALLOW_ORIGIN_LOCAL],
   });

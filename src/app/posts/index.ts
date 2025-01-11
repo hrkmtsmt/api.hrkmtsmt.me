@@ -1,8 +1,11 @@
 import { fetcher, toTimestamp } from '@src/modules';
-import { AppHandler } from '@src/types';
 import { ListResponse, Zenn, Qiita, Sizu } from './types';
+import { Hono } from 'hono';
+import { Env } from '@src/types';
 
-export const handler: AppHandler = async (c) => {
+const posts = new Hono<Env>();
+
+posts.get('/posts', async (c) => {
   try {
     const secret = JSON.parse(c.req.queries('secret')?.at(0) ?? 'false') as boolean;
 
@@ -52,10 +55,10 @@ export const handler: AppHandler = async (c) => {
           };
         }) ?? [];
 
-    const data: ListResponse = [...zenn, ...qiita, ...sizu].toSorted((a, b) => b.id - a.id);
+    const data: ListResponse = [...zenn, ...qiita, ...sizu].sort((a, b) => b.id - a.id);
 
     return c.json(data, 200);
   } catch (error: unknown) {
     return c.json({ message: 'Failed to fetch data from external service API.' }, 500);
   }
-};
+});

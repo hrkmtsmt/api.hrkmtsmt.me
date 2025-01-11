@@ -1,6 +1,11 @@
 import { Handler } from 'hono';
 
-export type Bindings = {
+/**
+ * NOTE: Workersの環境変数の設定場所
+ *
+ * https://dash.cloudflare.com/<account>/workers/services/view/api/production/settings
+ */
+type Bindings = {
   ALLOW_ORIGIN: string;
   ALLOW_ORIGIN_LOCAL: string;
   BASIC_AUTH_USERNAME: string;
@@ -14,4 +19,6 @@ export type Bindings = {
   SIZU_API_KEY: string;
 };
 
-export type AppHandler = Handler<{ Bindings: Bindings }>;
+export type Env = {
+  Bindings: Bindings;
+};

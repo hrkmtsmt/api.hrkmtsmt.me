@@ -1,5 +1,9 @@
-import { AppHandler } from '@src/types';
+import { Hono } from 'hono';
 
-export const handler: AppHandler = (c) => {
+const root = new Hono();
+
+root.get('/', (c) => {
   return c.json({ message: 'Hello World!' });
-};
+});
+
+export default root;
