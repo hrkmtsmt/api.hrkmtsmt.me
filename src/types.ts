@@ -5,16 +5,16 @@
  */
 type Bindings = {
   ALLOW_ORIGIN: string;
-  ALLOW_ORIGIN_LOCAL: string;
-  BASIC_AUTH_USERNAME: string;
-  BASIC_AUTH_PASWORD: string;
-  ZENN_BASE_URL: string;
-  ZENN_API_URL: string;
   QIITA_API_URL: string;
-  QIITA_API_ACCESS_TOKEN: string;
-  SIZU_BASE_URL: string;
+  QIITA_BASE_URL: string;
   SIZU_API_URL: string;
-  SIZU_API_KEY: string;
+  SIZU_BASE_URL: string;
+  ZENN_API_URL: string;
+  ZENN_BASE_URL: string;
+  SECRET_BASIC_AUTH_USERNAME: string;
+  SECRET_BASIC_AUTH_PASWORD: string;
+  SECRET_QIITA_API_ACCESS_TOKEN: string;
+  SECRET_SIZU_API_KEY: string;
 };
 
 export type Env = {

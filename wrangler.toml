@@ -4,8 +4,17 @@ main = "src/main.ts"
 compatibility_date = "2024-04-23"
 compatibility_flags = ["nodejs_compat"]
 
-# Bind a D1 database. D1 is Cloudflare’s native serverless SQL database.
-# Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#d1-databases
+[env.production]
+name = "api"
+[env.production.vars]
+ALLOW_ORIGIN = "https://hrkmtsmt.me"
+QIITA_API_URL = "https://qiita.com/api/v2"
+QIITA_BASE_URL = "https://qiita.com"
+SIZU_API_URL = "https://sizu.me/api"
+SIZU_BASE_URL = "https://sizu.me"
+ZENN_API_URL = "https://zenn.dev/api"
+ZENN_BASE_URL = "https://zenn.dev"
+
 [[d1_databases]]
 binding = "DB"                                       # i.e. available in your Worker on env.DB
 database_name = "hrkmtsmt"

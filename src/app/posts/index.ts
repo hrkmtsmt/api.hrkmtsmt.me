@@ -12,10 +12,10 @@ posts.get('/posts', async (c) => {
     const [z, q, s] = await Promise.all([
       fetcher<Zenn>(`${c.env.ZENN_API_URL}/articles?username=hrkmtsmt`),
       fetcher<Qiita>(`${c.env.QIITA_API_URL}/authenticated_user/items`, {
-        Authorization: `Bearer ${c.env.QIITA_API_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${c.env.SECRET_QIITA_API_ACCESS_TOKEN}`,
       }),
       secret
-        ? fetcher<Sizu>(`${c.env.SIZU_API_URL}/posts`, { Authorization: `Bearer ${c.env.SIZU_API_KEY}` })
+        ? fetcher<Sizu>(`${c.env.SIZU_API_URL}/posts`, { Authorization: `Bearer ${c.env.SECRET_SIZU_API_KEY}` })
         : undefined,
     ]);
 

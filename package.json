@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "wrangler dev --remote",
-    "deploy": "wrangler deploy",
+    "deploy": "wrangler deploy --env production && wrangler secret bulk secret.json",
     "test": "vitest",
     "format": "prettier --write . --config ./prettier.config.js",
     "cf-typegen": "wrangler types",

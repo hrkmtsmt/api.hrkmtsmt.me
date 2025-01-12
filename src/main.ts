@@ -11,14 +11,14 @@ app.use(logger());
 
 app.use('/*', (c, next) => {
   return cors({
-    origin: [c.env.ALLOW_ORIGIN, c.env.ALLOW_ORIGIN_LOCAL],
+    origin: [c.env.ALLOW_ORIGIN],
   })(c, next);
 });
 
 app.use('/*', (c, next) => {
   return basicAuth({
-    username: c.env.BASIC_AUTH_USERNAME,
-    password: c.env.BASIC_AUTH_PASWORD,
+    username: c.env.SECRET_BASIC_AUTH_USERNAME,
+    password: c.env.SECRET_BASIC_AUTH_PASWORD,
   })(c, next);
 });
 
