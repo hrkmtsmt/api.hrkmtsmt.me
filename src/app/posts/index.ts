@@ -3,7 +3,7 @@ import { ListResponse, Zenn, Qiita, Sizu } from './types';
 import { Hono } from 'hono';
 import { Env } from '@src/types';
 
-const posts = new Hono<Env>();
+export const posts = new Hono<Env>();
 
 posts.get('/posts', async (c) => {
   try {

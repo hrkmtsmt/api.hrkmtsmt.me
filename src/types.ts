@@ -1,5 +1,3 @@
-import { Handler } from 'hono';
-
 /**
  * NOTE: Workersの環境変数の設定場所
  *
