@@ -1,7 +1,4 @@
 import { defineConfig } from 'drizzle-kit';
-import * as dotenvx from '@dotenvx/dotenvx';
-
-dotenvx.config();
 
 export default defineConfig({
   out: './migrations',

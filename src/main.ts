@@ -2,9 +2,9 @@ import { Hono } from 'hono';
 import { logger } from 'hono/logger';
 import { cors } from 'hono/cors';
 import { handlers } from './app';
-import type { Bindings } from './types';
+import type { Env } from './types';
 
-const app = new Hono<{ Bindings: Bindings }>();
+const app = new Hono<Env>();
 
 app.use(logger());
 
