@@ -1,33 +1,37 @@
-export class FailedFetchError extends Error {
-  constructor(cause?: unknown) {
+export class ExternalSystemError extends Error {
+  private body?: unknown;
+
+  constructor(error?: unknown) {
     super();
-    this.name = 'FAILED_FETCH_ERROR';
+    this.name = 'EXTERNAL_SYSTEM_ERROR';
     this.message = 'データ取得に失敗しました';
-    this.cause = cause;
-    console.error(cause);
+    this.body = error;
+    console.error(this.body);
+  }
+
+  public static isEqualInstance(error: unknown): error is ExternalSystemError {
+    return error instanceof ExternalSystemError;
   }
 }
 
-export const isFailedFetchError = (error: unknown): error is FailedFetchError => {
-  return error instanceof FailedFetchError;
-};
+export class InternalSystemError extends Error {
+  private body?: unknown;
 
-export class SystemError extends Error {
-  constructor(cause?: unknown) {
+  constructor(error?: unknown) {
     super();
-    this.name = 'SYSTEM_ERROR';
+    this.name = 'INTERNAL_SYSTEM_ERROR';
     this.message = 'システムエラーです';
-    this.cause = cause;
-    console.error(cause);
+    this.body = error;
+    console.error(this.body);
+  }
+
+  public static isEqualInstance(error: unknown): error is InternalSystemError {
+    return error instanceof InternalSystemError;
   }
 }
 
-export const isSystemError = (error: unknown): error is SystemError => {
-  return error instanceof SystemError;
-};
-
-export type HttpClientError = FailedFetchError | SystemError;
+export type HttpClientError = ExternalSystemError | InternalSystemError;
 
 export const isHttpClientError = (error: unknown): error is HttpClientError => {
-  return isFailedFetchError(error) || isSystemError(error);
+  return ExternalSystemError.isEqualInstance(error) || InternalSystemError.isEqualInstance(error);
 };

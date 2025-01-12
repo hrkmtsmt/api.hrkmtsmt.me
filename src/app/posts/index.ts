@@ -1,22 +1,21 @@
-import { fetcher, toTimestamp } from '@src/modules';
-import { ListResponse, Zenn, Qiita, Sizu } from './types';
 import { Hono } from 'hono';
+import { drizzle } from 'drizzle-orm/d1';
+import { Api, toTimestamp } from '@src/modules';
+import * as s from '@src/schema';
 import { Env } from '@src/types';
+import { ListResponse, Zenn, Qiita, Sizu } from './types';
 
 export const posts = new Hono<Env>();
 
 posts.get('/posts', async (c) => {
   try {
+    const api = new Api(c.env);
     const secret = JSON.parse(c.req.queries('secret')?.at(0) ?? 'false') as boolean;
 
     const [z, q, s] = await Promise.all([
-      fetcher<Zenn>(`${c.env.ZENN_API_URL}/articles?username=hrkmtsmt`),
-      fetcher<Qiita>(`${c.env.QIITA_API_URL}/authenticated_user/items`, {
-        Authorization: `Bearer ${c.env.SECRET_QIITA_API_ACCESS_TOKEN}`,
-      }),
-      secret
-        ? fetcher<Sizu>(`${c.env.SIZU_API_URL}/posts`, { Authorization: `Bearer ${c.env.SECRET_SIZU_API_KEY}` })
-        : undefined,
+      api.zenn.get<Zenn>('/articles?username=hrkmtsmt'),
+      api.qiita.get<Qiita>('/authenticated_user/items'),
+      secret ? api.sizu.get<Sizu>('/posts') : undefined,
     ]);
 
     const zenn = z.articles.map<ListResponse[number]>((p) => {
