@@ -27,12 +27,3 @@ export type Sizu = {
     updatedAt: string;
   }>;
 };
-
-export type ListResponse = Array<{
-  id: number;
-  media: 'zenn' | 'qiita' | 'sizu';
-  title: string;
-  url: string;
-  createdAt: string;
-  updatedAt: string;
-}>;

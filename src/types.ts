@@ -4,6 +4,7 @@
  * https://dash.cloudflare.com/<account>/workers/services/view/api/production/settings
  */
 type Bindings = {
+  DB: D1Database;
   ALLOW_ORIGIN: string;
   QIITA_API_URL: string;
   QIITA_BASE_URL: string;
