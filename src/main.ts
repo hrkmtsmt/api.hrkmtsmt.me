@@ -7,7 +7,7 @@ import * as handlers from './app';
 import type { BlankSchema } from 'hono/types';
 import type { Env } from './types';
 
-const app = new Hono<Env, BlankSchema, '/'>()
+export const app = new Hono<Env, BlankSchema, '/'>()
   .use(logger())
   .use('/*', (c, next) => {
     return cors({
