@@ -18,7 +18,7 @@ ZENN_BASE_URL = "https://zenn.dev"
 [triggers]
 crons = ["0 0 * * mon"]
 
-[[d1_databases]]
+[[env.production.d1_databases]]
 binding = "DB"                                       # i.e. available in your Worker on env.DB
 database_name = "hrkmtsmt"
 database_id = "51791b72-d7cb-442e-827e-2b7f69919939"
