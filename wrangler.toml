@@ -8,6 +8,7 @@ compatibility_flags = ["nodejs_compat"]
 name = "api"
 [env.production.vars]
 ALLOW_ORIGIN = "https://hrkmtsmt.me"
+APP_URL = "https://api.hrkmtsmt.me"
 QIITA_API_URL = "https://qiita.com/api/v2"
 QIITA_BASE_URL = "https://qiita.com"
 SIZU_API_URL = "https://sizu.me/api"

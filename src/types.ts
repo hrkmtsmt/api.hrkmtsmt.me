@@ -6,6 +6,7 @@
 type Bindings = {
   DB: D1Database;
   ALLOW_ORIGIN: string;
+  APP_URL: string;
   QIITA_API_URL: string;
   QIITA_BASE_URL: string;
   SIZU_API_URL: string;
