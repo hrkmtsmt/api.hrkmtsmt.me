@@ -6,5 +6,5 @@ import type { Env } from './types';
 export const scheduled: ExportedHandlerScheduledHandler<Env['Bindings']> = async (_, env, c) => {
   const client = hc<AppType>(env.APP_URL);
   const headers = { Authorization: toBasicAuth(env.SECRET_BASIC_AUTH_USERNAME, env.SECRET_BASIC_AUTH_PASWORD) };
-  c.waitUntil(client['posts:bulk'].$put({ headers }));
+  await client['posts:bulk'].$put({ headers });
 };
