@@ -16,7 +16,7 @@ ZENN_API_URL = "https://zenn.dev/api"
 ZENN_BASE_URL = "https://zenn.dev"
 
 [triggers]
-crons = ["0 0 * * mon"]
+crons = ["*/1 * * * *"]
 
 [observability.logs]
 enabled = true
