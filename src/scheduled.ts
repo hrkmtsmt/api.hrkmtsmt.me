@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { HTTPException } from 'hono/http-exception';
-import { Api, Logger } from './modules';
+import { Api, Logger, splitArray } from './modules';
 import * as schemas from './schema';
 import type { Env } from './types';
 import type { Qiita, Sizu, Zenn } from './app/posts/types';
@@ -54,10 +54,12 @@ export const scheduled: ExportedHandlerScheduledHandler<Env['Bindings']> = async
             };
           });
 
-        console.log([...p1, ...p2, ...p3]);
-
         const db = drizzle(env.DB);
-        await db.insert(schemas.posts).values([...p1, ...p2, ...p3]);
+        await Promise.all(
+          splitArray([...p1, ...p2, ...p3], 10).map(async (r) => {
+            return db.insert(schemas.posts).values(r);
+          })
+        );
       } catch (error: unknown) {
         Logger.error(error);
         throw new HTTPException(500, { message: 'Failed to insert posts.' });
