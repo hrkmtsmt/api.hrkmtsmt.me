@@ -1,6 +1,7 @@
 export type Zenn = {
   articles: Array<{
-    id: string;
+    id: number;
+    slug: string;
     title: string;
     path: string;
     likedCount: number;

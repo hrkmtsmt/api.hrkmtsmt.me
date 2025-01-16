@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "wrangler dev --remote",
+    "dev:local": "wrangler dev --env local --test-scheduled",
+    "dev:remote": "wrangler dev --remote --test-scheduled",
     "deploy": "wrangler deploy --env production",
-    "secret": "wrangler secret bulk secret.json",
-    "deploy:prod": "bun run deploy && bun run secret",
+    "deploy:prod": "bun run deploy",
     "test": "vitest",
     "format": "prettier --write . --config ./prettier.config.js",
     "cf-typegen": "wrangler types",

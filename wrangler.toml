@@ -3,6 +3,18 @@ name = "api"
 main = "src/main.ts"
 compatibility_date = "2024-11-11"
 compatibility_flags = ["nodejs_compat"]
+workers_dev = false
+preview_urls = false
+
+[env.local.vars]
+ALLOW_ORIGIN = "http://localhost:3000"
+APP_URL = "http://localhost:8787"
+QIITA_API_URL = "https://qiita.com/api/v2"
+QIITA_BASE_URL = "https://qiita.com"
+SIZU_API_URL = "https://sizu.me/api/v1"
+SIZU_BASE_URL = "https://sizu.me"
+ZENN_API_URL = "https://zenn.dev/api"
+ZENN_BASE_URL = "https://zenn.dev"
 
 [env.production]
 name = "api"
@@ -11,7 +23,7 @@ ALLOW_ORIGIN = "https://hrkmtsmt.me"
 APP_URL = "https://api.hrkmtsmt.me"
 QIITA_API_URL = "https://qiita.com/api/v2"
 QIITA_BASE_URL = "https://qiita.com"
-SIZU_API_URL = "https://sizu.me/api"
+SIZU_API_URL = "https://sizu.me/api/v1"
 SIZU_BASE_URL = "https://sizu.me"
 ZENN_API_URL = "https://zenn.dev/api"
 ZENN_BASE_URL = "https://zenn.dev"

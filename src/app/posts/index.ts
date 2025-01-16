@@ -29,9 +29,9 @@ export const posts = new Hono<Env, BlankSchema, '/'>()
 
       const now = new Date();
 
-      const p1 = zenn.articles.map((p) => {
+      const p1 = zenn.articles.map<typeof s.posts.$inferInsert>((p) => {
         return {
-          id: p.id,
+          id: p.slug,
           media: 'Zenn' as const,
           title: p.title,
           url: `${c.env.ZENN_BASE_URL}${p.path}`,
@@ -40,7 +40,7 @@ export const posts = new Hono<Env, BlankSchema, '/'>()
         };
       });
 
-      const p2 = qiita.map((p) => {
+      const p2 = qiita.map<typeof s.posts.$inferInsert>((p) => {
         return {
           id: p.id,
           media: 'Qiita' as const,
@@ -53,19 +53,19 @@ export const posts = new Hono<Env, BlankSchema, '/'>()
 
       const p3 = sizu.posts
         .filter((p) => p.visibility === 'ANYONE')
-        .map((p) => {
+        .map<typeof s.posts.$inferInsert>((p) => {
           return {
             id: p.slug,
             media: 'Sizu' as const,
             title: p.title,
-            url: `${c.env.SIZU_BASE_URL}/${p.slug}`,
+            url: `${c.env.SIZU_BASE_URL}/hrkmtsmt/posts/${p.slug}`,
             createdAt: now,
             publishedAt: new Date(p.updatedAt),
           };
         });
 
       const db = drizzle(c.env.DB);
-      db.insert(s.posts).values([...p1, ...p2, ...p3]);
+      await db.insert(s.posts).values([...p1, ...p2, ...p3]);
 
       return c.json(null);
     } catch (error: unknown) {

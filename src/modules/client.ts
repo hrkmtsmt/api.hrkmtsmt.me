@@ -39,7 +39,6 @@ export class Client {
   private async fetcher<T, U>(url: string, method: HttpMethods, body?: U, headers?: Headers): Promise<T> {
     try {
       const response = await fetch(url, {
-        mode: 'cors',
         method,
         body: this.createBody<U>(body),
         headers: {
