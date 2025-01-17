@@ -21,8 +21,8 @@ export const scheduled: ExportedHandlerScheduledHandler<Env['Bindings']> = async
 
         const p1 = zenn.articles.map<typeof schemas.posts.$inferInsert>((p) => {
           return {
-            id: p.slug,
-            media: 'Zenn' as const,
+            slug: p.slug,
+            media: 'zenn' as const,
             title: p.title,
             url: `${env.ZENN_BASE_URL}${p.path}`,
             createdAt: now,
@@ -32,8 +32,8 @@ export const scheduled: ExportedHandlerScheduledHandler<Env['Bindings']> = async
 
         const p2 = qiita.map<typeof schemas.posts.$inferInsert>((p) => {
           return {
-            id: p.id,
-            media: 'Qiita' as const,
+            slug: p.id,
+            media: 'qiita' as const,
             title: p.title,
             url: p.url,
             createdAt: now,
@@ -45,8 +45,8 @@ export const scheduled: ExportedHandlerScheduledHandler<Env['Bindings']> = async
           .filter((p) => p.visibility === 'ANYONE')
           .map<typeof schemas.posts.$inferInsert>((p) => {
             return {
-              id: p.slug,
-              media: 'Sizu' as const,
+              slug: p.slug,
+              media: 'sizu' as const,
               title: p.title,
               url: `${env.SIZU_BASE_URL}/hrkmtsmt/posts/${p.slug}`,
               createdAt: now,

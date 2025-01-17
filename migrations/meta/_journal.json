@@ -15,6 +15,13 @@
       "when": 1736677404988,
       "tag": "0001_posts-table-add-timestamps",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1737127195862,
+      "tag": "0002_post-tabel-fix-column",
+      "breakpoints": true
     }
   ]
 }
