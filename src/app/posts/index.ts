@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
-import { desc, eq, not } from 'drizzle-orm';
+import { or, desc, eq, not } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/d1';
 import { Logger } from '@src/modules';
 import * as s from '@src/schema';
@@ -12,11 +12,12 @@ export const posts = new Hono<Env, BlankSchema, '/'>().get('/posts', async (c) =
     const limit = Number(c.req.query('limit')) || 12;
     const offset = Number(c.req.query('offset')) || 0;
     const secret = c.req.query('secret')?.toLowerCase() === 'true';
+    const media = (c.req.query('media') as typeof s.posts.$inferInsert.media) || undefined;
 
     const result = await drizzle(c.env.DB)
       .select()
       .from(s.posts)
-      .where(!secret ? not(eq(s.posts.media, 'sizu')) : undefined)
+      .where(or((!secret ? not(eq(s.posts.media, 'sizu')) : undefined, media ? eq(s.posts.media, media) : undefined)))
       .orderBy(desc(s.posts.publishedAt))
       .limit(limit)
       .offset(offset * limit);
