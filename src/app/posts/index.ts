@@ -1,27 +1,27 @@
 import { Hono } from 'hono';
+import { HTTPException } from 'hono/http-exception';
+import { desc, eq, not } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/d1';
 import { Logger } from '@src/modules';
 import * as s from '@src/schema';
 import { Env } from '@src/types';
-import { BlankSchema } from 'hono/types';
-import { HTTPException } from 'hono/http-exception';
-import { asc } from 'drizzle-orm';
+import type { BlankSchema } from 'hono/types';
 
 export const posts = new Hono<Env, BlankSchema, '/'>().get('/posts', async (c) => {
   try {
-    const offset = Number(c.req.query('offset')) ?? 1;
-    const db = drizzle(c.env.DB);
-    const result = await db.select().from(s.posts).orderBy(asc(s.posts.publishedAt)).limit(12).offset(offset);
-    const secret = (p: (typeof result)[number]) => {
-      if (Boolean(c.req.query('secret'))) {
-        return true;
-      }
+    const limit = Number(c.req.query('limit')) || 12;
+    const offset = Number(c.req.query('offset')) || 0;
+    const secret = c.req.query('secret')?.toLowerCase() === 'true';
 
-      return p.media !== 'sizu';
-    };
-    const response = [...result].filter(secret);
+    const result = await drizzle(c.env.DB)
+      .select()
+      .from(s.posts)
+      .where(!secret ? not(eq(s.posts.media, 'sizu')) : undefined)
+      .orderBy(desc(s.posts.publishedAt))
+      .limit(limit)
+      .offset(offset * limit);
 
-    return c.json(response, 200);
+    return c.json(result, 200);
   } catch (error: unknown) {
     Logger.error(error);
     throw new HTTPException(500, { message: 'Failed to fetch posts.' });
