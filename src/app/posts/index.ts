@@ -14,10 +14,33 @@ export const posts = new Hono<Env, BlankSchema, '/'>().get('/posts', async (c) =
     const secret = c.req.query('secret')?.toLowerCase() === 'true';
     const media = (c.req.query('media') as typeof s.posts.$inferInsert.media) || undefined;
 
+    if (media) {
+      const result = await drizzle(c.env.DB)
+        .select()
+        .from(s.posts)
+        .where(eq(s.posts.media, media))
+        .orderBy(desc(s.posts.publishedAt))
+        .limit(limit)
+        .offset(offset * limit);
+
+      return c.json(result, 200);
+    }
+
+    if (secret) {
+      const result = await drizzle(c.env.DB)
+        .select()
+        .from(s.posts)
+        .orderBy(desc(s.posts.publishedAt))
+        .limit(limit)
+        .offset(offset * limit);
+
+      return c.json(result, 200);
+    }
+
     const result = await drizzle(c.env.DB)
       .select()
       .from(s.posts)
-      .where(or((!secret ? not(eq(s.posts.media, 'sizu')) : undefined, media ? eq(s.posts.media, media) : undefined)))
+      .where(not(eq(s.posts.media, 'sizu')))
       .orderBy(desc(s.posts.publishedAt))
       .limit(limit)
       .offset(offset * limit);
