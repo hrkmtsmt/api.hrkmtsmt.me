@@ -26,13 +26,7 @@ export const posts = new Hono<Env, BlankSchema, '/'>().get('/posts', async (c) =
           .orderBy(desc(s.posts.publishedAt))
           .limit(limit)
           .offset(offset * limit),
-        db
-          .select({ total: count() })
-          .from(s.posts)
-          .where(eq(s.posts.media, media))
-          .orderBy(desc(s.posts.publishedAt))
-          .limit(limit)
-          .offset(offset * limit),
+        db.select({ total: count() }).from(s.posts).where(eq(s.posts.media, media)),
       ]);
 
       const { pages, next } = new Pagination(total, limit, page);
@@ -48,12 +42,7 @@ export const posts = new Hono<Env, BlankSchema, '/'>().get('/posts', async (c) =
           .orderBy(desc(s.posts.publishedAt))
           .limit(limit)
           .offset(offset * limit),
-        db
-          .select({ total: count() })
-          .from(s.posts)
-          .orderBy(desc(s.posts.publishedAt))
-          .limit(limit)
-          .offset(offset * limit),
+        db.select({ total: count() }).from(s.posts),
       ]);
 
       const { pages, next } = new Pagination(total, limit, page);
@@ -72,10 +61,7 @@ export const posts = new Hono<Env, BlankSchema, '/'>().get('/posts', async (c) =
       db
         .select({ total: count() })
         .from(s.posts)
-        .where(not(eq(s.posts.media, 'sizu')))
-        .orderBy(desc(s.posts.publishedAt))
-        .limit(limit)
-        .offset(offset * limit),
+        .where(not(eq(s.posts.media, 'sizu'))),
     ]);
 
     const { pages, next } = new Pagination(total, limit, page);
