@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/d1';
 import { HTTPException } from 'hono/http-exception';
 import { Api, Logger, splitArray } from './modules';
@@ -57,7 +58,15 @@ export const scheduled: ExportedHandlerScheduledHandler<Env['Bindings']> = async
         const db = drizzle(env.DB);
         await Promise.all(
           splitArray([...p1, ...p2, ...p3], 10).map(async (r) => {
-            return db.insert(schemas.posts).values(r);
+            return db
+              .insert(schemas.posts)
+              .values(r)
+              .onConflictDoUpdate({
+                target: [schemas.posts.slug],
+                set: {
+                  title: sql`excluded.title`,
+                },
+              });
           })
         );
       } catch (error: unknown) {
