@@ -7,6 +7,9 @@ type Bindings = {
   DB: D1Database;
   ALLOW_ORIGIN: string;
   APP_URL: string;
+  HATENA_API_URL: string;
+  HATENA_BASE_URL: string;
+  HATENA_OAUTH_API_URL: string;
   QIITA_API_URL: string;
   QIITA_BASE_URL: string;
   SIZU_API_URL: string;
@@ -15,6 +18,8 @@ type Bindings = {
   ZENN_BASE_URL: string;
   SECRET_BASIC_AUTH_USERNAME: string;
   SECRET_BASIC_AUTH_PASWORD: string;
+  SECRET_HATENA_OAUTH_CONSUMER_KEY: string;
+  SECRET_HATENA_OAUTH_CONSUMER_SECRET: string;
   SECRET_QIITA_API_ACCESS_TOKEN: string;
   SECRET_SIZU_API_KEY: string;
 };
