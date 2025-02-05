@@ -3,8 +3,8 @@ import { drizzle } from 'drizzle-orm/d1';
 import { HTTPException } from 'hono/http-exception';
 import { Api, Logger, splitArray } from './modules';
 import * as schemas from './schema';
+import type { ExportedHandlerScheduledHandler } from '@cloudflare/workers-types';
 import type { Env } from './types';
-import type { Qiita, Sizu, Zenn } from './app/posts/types';
 
 export const scheduled: ExportedHandlerScheduledHandler<Env['Bindings']> = async (_, env, context) => {
   context.waitUntil(
@@ -12,37 +12,38 @@ export const scheduled: ExportedHandlerScheduledHandler<Env['Bindings']> = async
       try {
         const api = new Api(env);
 
+        // TODO: ページネーションがあれば再帰的に取得する
         const [zenn, qiita, sizu] = await Promise.all([
-          api.zenn.get<Zenn>('/articles?username=hrkmtsmt'),
-          api.qiita.get<Qiita>('/authenticated_user/items'),
-          api.sizu.get<Sizu>('/posts'),
+          api.zenn.articles.get({ username: 'hrkmtsmt' }),
+          api.qiita.articles.get(),
+          api.sizu.articles.get(),
         ]);
 
-        const now = new Date();
+        const createdAt = new Date();
 
-        const p1 = zenn.articles.map<typeof schemas.posts.$inferInsert>((p) => {
+        const z = zenn.articles.map<typeof schemas.posts.$inferInsert>((p) => {
           return {
             slug: p.slug,
             media: 'zenn' as const,
             title: p.title,
             url: `${env.ZENN_BASE_URL}${p.path}`,
-            createdAt: now,
+            createdAt,
             publishedAt: new Date(p.bodyUpdatedAt),
           };
         });
 
-        const p2 = qiita.map<typeof schemas.posts.$inferInsert>((p) => {
+        const q = qiita.map<typeof schemas.posts.$inferInsert>((p) => {
           return {
             slug: p.id,
             media: 'qiita' as const,
             title: p.title,
             url: p.url,
-            createdAt: now,
+            createdAt,
             publishedAt: new Date(p.updatedAt),
           };
         });
 
-        const p3 = sizu.posts
+        const s = sizu.posts
           .filter((p) => p.visibility === 'ANYONE')
           .map<typeof schemas.posts.$inferInsert>((p) => {
             return {
@@ -50,14 +51,14 @@ export const scheduled: ExportedHandlerScheduledHandler<Env['Bindings']> = async
               media: 'sizu' as const,
               title: p.title,
               url: `${env.SIZU_BASE_URL}/hrkmtsmt/posts/${p.slug}`,
-              createdAt: now,
+              createdAt,
               publishedAt: new Date(p.updatedAt),
             };
           });
 
         const db = drizzle(env.DB);
         await Promise.all(
-          splitArray([...p1, ...p2, ...p3], 10).map(async (r) => {
+          splitArray([...z, ...q, ...s], 10).map(async (r) => {
             return db
               .insert(schemas.posts)
               .values(r)
