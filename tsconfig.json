@@ -4,7 +4,7 @@
     "lib": ["ESNext"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "types": ["@cloudflare/workers-types/2023-07-01", "bun"],
+    "types": ["@cloudflare/workers-types/2023-07-01", "bun-types"],
     "resolveJsonModule": true,
     "allowJs": true,
     "checkJs": false,
@@ -18,5 +18,5 @@
       "@src/*": ["./src/*"]
     }
   },
-  "exclude": ["test"]
+  "exclude": ["node_modules", "dist", "test"]
 }

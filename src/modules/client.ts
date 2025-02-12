@@ -10,12 +10,14 @@ type HttpMethods = (typeof HTTP_METHODS)[keyof typeof HTTP_METHODS];
 
 type Headers = Record<string, string>;
 
+const h: Headers = { 'Content-Type': 'application/json; charset=utf-8' };
+
 export class Client {
   private BASE_URL: string;
 
-  private headers?: Headers;
+  private headers: Headers;
 
-  constructor(baseURL: string, headers?: Headers) {
+  constructor(baseURL: string, headers: Headers = h) {
     this.BASE_URL = baseURL;
     this.headers = headers;
   }
@@ -24,40 +26,49 @@ export class Client {
     return `${this.BASE_URL}${path}`;
   }
 
-  private createBody<U>(body?: U) {
+  private body<U>(body?: U) {
     if (!body) {
       return undefined;
     }
 
-    if (body instanceof FormData) {
+    if (body instanceof FormData || typeof body === 'string') {
       return body;
     }
 
     return JSON.stringify(body);
   }
 
+  private async response<T>(response: Awaited<ReturnType<typeof fetch>>) {
+    const type = response.headers.get('Content-Type');
+
+    if (type?.includes('application/json')) {
+      return camelcaseKeys((await response.json()) as never, { deep: true }) as T;
+    }
+
+    if (type?.includes('application/x-www-form-urlencoded')) {
+      return response.text() as T;
+    }
+
+    return response.blob() as T;
+  }
+
   private async fetcher<T, U>(url: string, method: HttpMethods, body?: U, headers?: Headers): Promise<T> {
     try {
       const response = await fetch(url, {
         method,
-        body: this.createBody<U>(body),
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-          ...headers,
-        },
+        body: this.body<U>(body),
+        headers: { ...this.headers, ...headers },
       });
 
       if (response.status === 204) {
         return undefined as T;
       }
 
-      const data = await response.json();
-
       if (response.ok) {
-        return camelcaseKeys(data as never, { deep: true }) as T;
+        return this.response<T>(response);
       }
 
-      throw new ExternalSystemError(data);
+      throw new ExternalSystemError(await this.response(response));
     } catch (error: unknown) {
       if (ExternalSystemError.isEqualInstance(error)) {
         throw error;
@@ -67,11 +78,11 @@ export class Client {
     }
   }
 
-  public async get<T>(path: string): Promise<T> {
-    return this.fetcher(this.toURL(path), HTTP_METHODS.get, undefined, this.headers);
+  public async get<T>(path: string, headers?: Headers): Promise<T> {
+    return this.fetcher(this.toURL(path), HTTP_METHODS.get, undefined, { ...this.headers, ...headers });
   }
 
-  public async post<T, U>(path: string, body?: U): Promise<T> {
-    return this.fetcher(this.toURL(path), HTTP_METHODS.post, body, this.headers);
+  public async post<T, U>(path: string, body?: U, headers?: Headers): Promise<T> {
+    return this.fetcher(this.toURL(path), HTTP_METHODS.post, body, { ...this.headers, ...headers });
   }
 }

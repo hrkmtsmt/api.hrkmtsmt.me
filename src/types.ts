@@ -1,3 +1,5 @@
+import type { D1Database } from '@cloudflare/workers-types';
+
 /**
  * NOTE: Workersの環境変数の設定場所
  *
@@ -9,7 +11,7 @@ type Bindings = {
   APP_URL: string;
   HATENA_API_URL: string;
   HATENA_BASE_URL: string;
-  HATENA_OAUTH_API_URL: string;
+  HATENA_OAUTH_URL: string;
   QIITA_API_URL: string;
   QIITA_BASE_URL: string;
   SIZU_API_URL: string;
