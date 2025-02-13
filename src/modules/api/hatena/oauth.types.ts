@@ -17,7 +17,7 @@ export type InitiateAuthorizaitonParams = {
   oauthCallback: string;
   oauthConsumerKey: string;
   oauthNonce: string;
-  oauthSignature_method: string;
+  oauthSignatureMethod: string;
   oauthTimestamp: string;
   oauthVersion: string;
   oauthSignature: string;
@@ -32,7 +32,7 @@ export type InitiateResponse = {
 export type AccessTokenSignatureParams = {
   oauthConsumerKey: string;
   oauthNonce: string;
-  oauthSignature_method: string;
+  oauthSignatureMethod: string;
   oauthTimestamp: string;
   oauthToken: string;
   oauthVersion: string;
