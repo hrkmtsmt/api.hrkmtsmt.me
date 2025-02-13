@@ -1,7 +1,7 @@
+import queryString from 'query-string';
 import { Client } from '@src/modules';
 import type { Env } from '@src/types';
-import * as Articles from './articles.types';
-import queryString from 'query-string';
+import type * as Articles from './articles.types';
 
 const articles = (c: Client) => ({
   get: async (query: Articles.GetQuery) => {

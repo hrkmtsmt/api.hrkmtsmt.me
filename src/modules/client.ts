@@ -45,7 +45,10 @@ export class Client {
       return camelcaseKeys((await response.json()) as never, { deep: true }) as T;
     }
 
-    if (type?.includes('application/x-www-form-urlencoded')) {
+    if (
+      type?.includes('application/x-www-form-urlencoded' || type?.includes('text/plain')) ||
+      type?.includes('text/html')
+    ) {
       return response.text() as T;
     }
 

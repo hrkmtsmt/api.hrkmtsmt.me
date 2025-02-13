@@ -28,3 +28,25 @@ export type InitiateResponse = {
   oauthToken: string;
   oauthTokenSecret: string;
 };
+
+export type AccessTokenSignatureParams = {
+  oauthConsumerKey: string;
+  oauthNonce: string;
+  oauthSignature_method: string;
+  oauthTimestamp: string;
+  oauthToken: string;
+  oauthVersion: string;
+  oauthVerifier: string;
+};
+
+export type AccessTokenSignatureKeys = {
+  consumerSecret: string;
+  tokenSecret: string;
+};
+
+export type AccessTokenResponse = {
+  oauthToken: string;
+  oauthTokenSecret: string;
+  urlName: string;
+  displayName: string;
+};

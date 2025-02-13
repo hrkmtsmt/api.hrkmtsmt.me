@@ -12,7 +12,6 @@ import type { Env } from '@src/types';
 export const hatena = (env: Env['Bindings']) => {
   const c = new Client(env.HATENA_API_URL, { Authorization: `Bearer ${env.SECRET_QIITA_API_ACCESS_TOKEN}` });
   const o = new Client(env.HATENA_OAUTH_URL, { 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8' });
-
   return {
     // articles: articles(c),
     oauth: new HatenaOAuth(

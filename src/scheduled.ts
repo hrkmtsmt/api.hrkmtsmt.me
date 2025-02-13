@@ -12,8 +12,6 @@ export const scheduled: ExportedHandlerScheduledHandler<Env['Bindings']> = async
       try {
         const api = new Api(env);
 
-        const r = await api.hatena.oauth.initiate();
-
         // TODO: ページネーションがあれば再帰的に取得する処理をかく
         const [zenn, qiita, sizu] = await Promise.all([
           api.zenn.articles.get({ username: 'hrkmtsmt' }),

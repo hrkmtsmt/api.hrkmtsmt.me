@@ -1,4 +1,5 @@
 export * from './api';
+export * from './cache';
 export * from './client';
 export * from './http-client-error';
 export * from './logger';
