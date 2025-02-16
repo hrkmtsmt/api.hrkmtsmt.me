@@ -46,8 +46,9 @@ export class Client {
     }
 
     if (
-      type?.includes('application/x-www-form-urlencoded' || type?.includes('text/plain')) ||
-      type?.includes('text/html')
+      type?.includes('text/plain') ||
+      type?.includes('text/html') ||
+      type?.includes('application/x-www-form-urlencoded')
     ) {
       return response.text() as T;
     }

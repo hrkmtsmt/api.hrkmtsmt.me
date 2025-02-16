@@ -12,6 +12,18 @@ export const scheduled: ExportedHandlerScheduledHandler<Env['Bindings']> = async
       try {
         const api = new Api(env);
 
+        const hatenaOAuth = api.hatena.oauth.generateAuthorization(
+          'GET',
+          `${env.HATENA_API_URL}/authenticated_user/items`,
+          env.SECRET_HATENA_OAUTH_CONSUMER_KEY,
+          env.SECRET_HATENA_OAUTH_CONSUMER_SECRET,
+          env.SECRET_HATENA_OAUTH_ACCESS_TOKEN,
+          env.SECRET_HATENA_OAUTH_CONSUMER_SECRET
+        );
+
+        const r = await api.hatena.articles.get(hatenaOAuth);
+        console.log(r);
+
         // TODO: ページネーションがあれば再帰的に取得する処理をかく
         const [zenn, qiita, sizu] = await Promise.all([
           api.zenn.articles.get({ username: 'hrkmtsmt' }),
