@@ -27,14 +27,11 @@ export class HatenaOAuth {
     };
     const endpoint = '/oauth/initiate';
     const url = `${this.url}${endpoint}`;
-    const scope = 'read_public';
+    const scope = 'read_public,read_private';
     const signatureParams = { ...params, scope };
     const signatureKeys = { consumerSecret: this.consumerSecret, tokenSecret: '' };
-    const signature = OAuthBuilder.toSignature(HTTP_METHODS.post, url, signatureParams, signatureKeys);
-    const authorization = OAuthBuilder.toAuthorization<OAuth.InitiateAuthorizaitonParams>({
-      ...params,
-      oauthSignature: signature,
-    });
+    const oauthSignature = OAuthBuilder.toSignature(HTTP_METHODS.post, url, signatureParams, signatureKeys);
+    const authorization = OAuthBuilder.toAuthorization({ ...params, oauthSignature });
 
     const header = { Authorization: authorization };
     const body = queryString.stringify({ scope });
@@ -61,11 +58,11 @@ export class HatenaOAuth {
     };
     const endpoint = '/oauth/token';
     const url = `${this.url}${endpoint}`;
-    const signature = OAuthBuilder.toSignature(HTTP_METHODS.post, url, params, {
+    const oauthSignature = OAuthBuilder.toSignature(HTTP_METHODS.post, url, params, {
       consumerSecret: this.consumerSecret,
       tokenSecret: requestTokenSecret,
     });
-    const authorization = OAuthBuilder.toAuthorization({ ...params, oauthSignature: signature });
+    const authorization = OAuthBuilder.toAuthorization({ ...params, oauthSignature });
 
     const header = { Authorization: authorization };
     const body = null;
@@ -76,7 +73,7 @@ export class HatenaOAuth {
     return camelcaseKeys(json) as OAuth.AccessTokenResponse;
   }
 
-  public static generateAuthorization(
+  public generateAuthorization(
     method: string,
     url: string,
     consumerKey: string,
@@ -92,7 +89,6 @@ export class HatenaOAuth {
       oauthToken: accessToken,
       oauthVersion: '1.0',
     };
-
     const oauthSignature = OAuthBuilder.toSignature(method, url, params, {
       consumerSecret,
       tokenSecret: accessTokenSecret,
