@@ -1,4 +1,4 @@
-export class Pagination<T extends any[]> {
+export class Pagination {
   public readonly pages: number;
 
   public readonly next: number | null;

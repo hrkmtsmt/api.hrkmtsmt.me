@@ -1,6 +1,6 @@
 export type GetQuery = {
   username: string;
-  order?: 'latest';
+  order?: "latest";
   page?: number;
 };
 

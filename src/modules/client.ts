@@ -1,16 +1,16 @@
-import camelcaseKeys from 'camelcase-keys';
-import { ExternalSystemError, InternalSystemError } from '.';
+import camelcaseKeys from "camelcase-keys";
+import { ExternalSystemError, InternalSystemError } from ".";
 
 export const HTTP_METHODS = {
-  get: 'GET',
-  post: 'POST',
+  get: "GET",
+  post: "POST",
 } as const;
 
 type HttpMethods = (typeof HTTP_METHODS)[keyof typeof HTTP_METHODS];
 
 type Headers = Record<string, string>;
 
-const h: Headers = { 'Content-Type': 'application/json; charset=utf-8' };
+const h: Headers = { "Content-Type": "application/json; charset=utf-8" };
 
 export class Client {
   private BASE_URL: string;
@@ -31,7 +31,7 @@ export class Client {
       return undefined;
     }
 
-    if (body instanceof FormData || typeof body === 'string') {
+    if (body instanceof FormData || typeof body === "string") {
       return body;
     }
 
@@ -39,16 +39,16 @@ export class Client {
   }
 
   private async response<T>(response: Awaited<ReturnType<typeof fetch>>) {
-    const type = response.headers.get('Content-Type');
+    const type = response.headers.get("Content-Type");
 
-    if (type?.includes('application/json')) {
+    if (type?.includes("application/json")) {
       return camelcaseKeys((await response.json()) as never, { deep: true }) as T;
     }
 
     if (
-      type?.includes('text/plain') ||
-      type?.includes('text/html') ||
-      type?.includes('application/x-www-form-urlencoded')
+      type?.includes("text/plain") ||
+      type?.includes("text/html") ||
+      type?.includes("application/x-www-form-urlencoded")
     ) {
       return response.text() as T;
     }

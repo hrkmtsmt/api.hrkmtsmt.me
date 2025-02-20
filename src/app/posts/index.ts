@@ -1,19 +1,19 @@
-import { Hono } from 'hono';
-import { HTTPException } from 'hono/http-exception';
-import { count, desc, eq, not } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/d1';
-import { Logger, Pagination } from '@src/modules';
-import * as s from '@src/schema';
-import type { Env } from '@src/types';
-import type { BlankSchema } from 'hono/types';
+import { Hono } from "hono";
+import { HTTPException } from "hono/http-exception";
+import { count, desc, eq, not } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/d1";
+import { Logger, Pagination } from "@src/modules";
+import * as s from "@src/schema";
+import type { Env } from "@src/types";
+import type { BlankSchema } from "hono/types";
 
-export const posts = new Hono<Env, BlankSchema, '/'>().get('/posts', async (c) => {
+export const posts = new Hono<Env, BlankSchema, "/">().get("/posts", async (c) => {
   try {
-    const limit = Number(c.req.query('limit')) || 12;
-    const page = Number(c.req.query('page')) || 1;
+    const limit = Number(c.req.query("limit")) || 12;
+    const page = Number(c.req.query("page")) || 1;
     const offset = page - 1;
-    const secret = c.req.query('secret')?.toLowerCase() === 'true';
-    const media = (c.req.query('media') as typeof s.posts.$inferInsert.media) || undefined;
+    const secret = c.req.query("secret")?.toLowerCase() === "true";
+    const media = (c.req.query("media") as typeof s.posts.$inferInsert.media) || undefined;
 
     const db = drizzle(c.env.DB);
 
@@ -54,14 +54,14 @@ export const posts = new Hono<Env, BlankSchema, '/'>().get('/posts', async (c) =
       db
         .select()
         .from(s.posts)
-        .where(not(eq(s.posts.media, 'sizu')))
+        .where(not(eq(s.posts.media, "sizu")))
         .orderBy(desc(s.posts.publishedAt))
         .limit(limit)
         .offset(offset * limit),
       db
         .select({ total: count() })
         .from(s.posts)
-        .where(not(eq(s.posts.media, 'sizu'))),
+        .where(not(eq(s.posts.media, "sizu"))),
     ]);
 
     const { pages, next } = new Pagination(total, limit, page);
@@ -69,6 +69,6 @@ export const posts = new Hono<Env, BlankSchema, '/'>().get('/posts', async (c) =
     return c.json({ data, pages, next }, 200);
   } catch (error: unknown) {
     Logger.error(error);
-    throw new HTTPException(500, { message: 'Failed to fetch posts.' });
+    throw new HTTPException(500, { message: "Failed to fetch posts." });
   }
 });

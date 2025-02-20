@@ -3,8 +3,8 @@ export class ExternalSystemError extends Error {
 
   constructor(error?: unknown) {
     super();
-    this.name = 'EXTERNAL_SYSTEM_ERROR';
-    this.message = 'データ取得に失敗しました';
+    this.name = "EXTERNAL_SYSTEM_ERROR";
+    this.message = "データ取得に失敗しました";
     this.body = error;
     console.error(this.body);
   }
@@ -19,8 +19,8 @@ export class InternalSystemError extends Error {
 
   constructor(error?: unknown) {
     super();
-    this.name = 'INTERNAL_SYSTEM_ERROR';
-    this.message = 'システムエラーです';
+    this.name = "INTERNAL_SYSTEM_ERROR";
+    this.message = "システムエラーです";
     this.body = error;
     console.error(this.body);
   }

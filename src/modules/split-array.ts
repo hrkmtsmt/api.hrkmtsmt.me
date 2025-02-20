@@ -1,3 +1,4 @@
+// biome-ignore lint/complexity/noUselessTypeConstraint: <explanation>
 export const splitArray = <T extends any>(array: T[], limit: number): T[][] => {
   return array.reduce<T[][]>((acc, current) => {
     const latest = acc.at(-1);

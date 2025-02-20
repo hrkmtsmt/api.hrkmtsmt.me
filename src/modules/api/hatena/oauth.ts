@@ -1,13 +1,13 @@
-import Crypto from 'crypto';
-import queryString from 'query-string';
-import { Client, HTTP_METHODS, OAuthBuilder } from '@src/modules';
-import camelcaseKeys from 'camelcase-keys';
-import * as OAuth from './oauth.types';
+import Crypto from "crypto";
+import queryString from "query-string";
+import { Client, HTTP_METHODS, OAuthBuilder } from "@src/modules";
+import camelcaseKeys from "camelcase-keys";
+import * as OAuth from "./oauth.types";
 
 export class HatenaOAuth {
-  private signatureMethod = 'HMAC-SHA1';
+  private signatureMethod = "HMAC-SHA1";
 
-  private version = '1.0';
+  private version = "1.0";
 
   constructor(
     private oauth: Client,
@@ -18,18 +18,18 @@ export class HatenaOAuth {
 
   public async initiate() {
     const params = {
-      oauthCallback: 'http://localhost:8787/oauth/hatena/callback',
+      oauthCallback: "http://localhost:8787/oauth/hatena/callback",
       oauthConsumerKey: this.consumerKey,
       oauthNonce: OAuthBuilder.nonce(),
       oauthSignatureMethod: this.signatureMethod,
       oauthTimestamp: OAuthBuilder.timestamp(),
       oauthVersion: this.version,
     };
-    const endpoint = '/oauth/initiate';
+    const endpoint = "/oauth/initiate";
     const url = `${this.url}${endpoint}`;
-    const scope = 'read_public,read_private';
+    const scope = "read_public,read_private";
     const signatureParams = { ...params, scope };
-    const signatureKeys = { consumerSecret: this.consumerSecret, tokenSecret: '' };
+    const signatureKeys = { consumerSecret: this.consumerSecret, tokenSecret: "" };
     const oauthSignature = OAuthBuilder.toSignature(HTTP_METHODS.post, url, signatureParams, signatureKeys);
     const authorization = OAuthBuilder.toAuthorization({ ...params, oauthSignature });
 
@@ -56,7 +56,7 @@ export class HatenaOAuth {
       oauthVerifier: verifier,
       oauthVersion: this.version,
     };
-    const endpoint = '/oauth/token';
+    const endpoint = "/oauth/token";
     const url = `${this.url}${endpoint}`;
     const oauthSignature = OAuthBuilder.toSignature(HTTP_METHODS.post, url, params, {
       consumerSecret: this.consumerSecret,
@@ -84,10 +84,10 @@ export class HatenaOAuth {
     const params = {
       oauthConsumerKey: consumerKey,
       oauthNonce: OAuthBuilder.nonce(),
-      oauthSignatureMethod: 'HMAC-SHA1',
+      oauthSignatureMethod: "HMAC-SHA1",
       oauthTimestamp: OAuthBuilder.timestamp(),
       oauthToken: accessToken,
-      oauthVersion: '1.0',
+      oauthVersion: "1.0",
     };
     const oauthSignature = OAuthBuilder.toSignature(method, url, params, {
       consumerSecret,

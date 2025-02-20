@@ -1,8 +1,8 @@
-import { hatena } from './hatena';
-import { qiita } from './qiita';
-import { sizu } from './sizu';
-import { zenn } from './zenn';
-import type { Env } from '@src/types';
+import { hatena } from "./hatena";
+import { qiita } from "./qiita";
+import { sizu } from "./sizu";
+import { zenn } from "./zenn";
+import type { Env } from "@src/types";
 
 export class Api {
   public hatena: ReturnType<typeof hatena>;
@@ -13,7 +13,7 @@ export class Api {
 
   public zenn: ReturnType<typeof zenn>;
 
-  constructor(env: Env['Bindings']) {
+  constructor(env: Env["Bindings"]) {
     this.hatena = hatena(env);
     this.qiita = qiita(env);
     this.sizu = sizu(env);
