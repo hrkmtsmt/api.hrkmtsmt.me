@@ -9,7 +9,7 @@ export class MediaSelecter {
 		"zenn",
 	];
 
-	public readonly value: Post["media"][] | undefined;
+	public readonly value: Post["media"][] | "all";
 
 	constructor(media: Post["media"] | undefined, useSecret: boolean) {
 		this.value = this.calcValue(media, useSecret);
@@ -18,7 +18,7 @@ export class MediaSelecter {
 	private calcValue(
 		media: Post["media"] | undefined,
 		useSecret: boolean,
-	): Post["media"][] | undefined {
+	): Post["media"][] | "all" {
 		if (media === "sizu" && !useSecret) {
 			throw new Error("Invalid category select.");
 		}
@@ -32,7 +32,7 @@ export class MediaSelecter {
 		}
 
 		if (!media && useSecret) {
-			return undefined;
+			return "all";
 		}
 
 		if (!media && !useSecret) {

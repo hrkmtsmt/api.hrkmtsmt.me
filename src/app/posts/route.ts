@@ -18,7 +18,8 @@ export const posts = new Hono<Env, BlankSchema, "/">().get(
 			const media = c.req.query("media") as Post["media"] | undefined;
 
 			const service = new PostService(drizzle(c.env.DB));
-			const { value: medium } = new MediaSelecter(media, secret);
+			const selecter = new MediaSelecter(media, secret);
+			const medium = selecter.value === "all" ? undefined : selecter.value;
 
 			const [data, total] = await Promise.all([
 				service.retrive({ medium, limit, offset: offset * limit }),

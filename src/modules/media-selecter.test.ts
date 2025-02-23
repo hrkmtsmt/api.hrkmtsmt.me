@@ -22,10 +22,9 @@ describe("class MediaSelecter", () => {
 			expect(selecter.value).toStrictEqual(["qiita"]);
 		});
 
-		test("メディアの指定なしでシークレットモードが有効な場合は何も返さない", () => {
+		test("メディアの指定なしでシークレットモードが有効な場合は全メディアを返す", () => {
 			const selecter = new MediaSelecter(undefined, true);
-			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-			expect(selecter.value).toBe(undefined as any);
+			expect(selecter.value).toBe("all");
 		});
 
 		test("メディアの指定なしでシークレットモードが無効な場合は指定されたはしずかなインターネットを含まない全メディアを返す", () => {
