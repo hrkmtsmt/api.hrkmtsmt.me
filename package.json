@@ -7,16 +7,19 @@
 		"dev:remote": "wrangler dev --remote --test-scheduled",
 		"deploy": "wrangler deploy --env production",
 		"deploy:prod": "bun run deploy",
-		"format": "bunx biome format --write",
-		"lint": "bunx biome lint",
+		"format": "bun run biome format --write",
+		"lint": "bun run biome lint",
 		"cf-typegen": "wrangler types",
 		"spell-check": "cspell '**'",
-		"migrate": "npx drizzle-kit migrate",
-		"migrate:generate": "npx drizzle-kit generate"
+		"migrate": "bun run drizzle-kit migrate",
+		"migrate:generate": "bun run drizzle-kit generate",
+		"test": "bun run test:migrate && bun test && rm -rf test/db.sqlite",
+		"test:migrate": "bun run drizzle-kit migrate --config=test/drizzle.config.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@cloudflare/workers-types": "4.20250214.0",
+		"better-sqlite3": "^11.8.1",
 		"bun-types": "1.2.2",
 		"drizzle-kit": "0.30.4",
 		"typescript": "5.7.3",

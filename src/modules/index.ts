@@ -3,6 +3,7 @@ export * from "./cache";
 export * from "./client";
 export * from "./http-client-error";
 export * from "./logger";
+export * from "./media-selecter";
 export * from "./oauth-builder";
 export * from "./pagination";
 export * from "./split-array";
