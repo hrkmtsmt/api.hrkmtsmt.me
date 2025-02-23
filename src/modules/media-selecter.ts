@@ -1,4 +1,4 @@
-import { Post } from "@src/schema/types";
+import { Post } from "@schema/types";
 
 export class MediaSelecter {
 	private readonly medium: Post["media"][] = [

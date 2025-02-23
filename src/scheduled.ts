@@ -1,10 +1,10 @@
 import { drizzle } from "drizzle-orm/d1";
 import { HTTPException } from "hono/http-exception";
-import { Logger, Api } from "./modules";
-import { PostService } from "./app/posts/service";
+import { Logger, Api } from "@modules";
+import { PostService } from "@app/posts";
 import type { ExportedHandlerScheduledHandler } from "@cloudflare/workers-types";
-import type { Env } from "./types";
-import type { Post } from "./schema/types";
+import type { Env } from "@types";
+import type { Post } from "@schema/types";
 
 export const scheduled: ExportedHandlerScheduledHandler<
 	Env["Bindings"]

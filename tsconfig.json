@@ -15,7 +15,10 @@
 		"strict": true,
 		"skipLibCheck": true,
 		"paths": {
-			"@src/*": ["./src/*"],
+			"@*": ["./src/*"],
+			"@app/*": ["./src/app/*"],
+			"@modules/*": ["./src/modules/*"],
+			"@schema/*": ["./src/schema/*"],
 			"@test/*": ["./test/*"]
 		}
 	},

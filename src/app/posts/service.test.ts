@@ -1,7 +1,7 @@
 import { test, describe, expect, afterEach } from "bun:test";
-import { DatabaseManager } from "@test/database-manager";
+import { DatabaseManager } from "@test/index";
 import { PostService } from "./service";
-import type { Post } from "@src/schema/types";
+import type { Post } from "@schema/types";
 
 const data: Post[] = [
 	{

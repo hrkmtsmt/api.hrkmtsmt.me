@@ -1,6 +1,6 @@
 import type { D1Database } from "@cloudflare/workers-types";
 import type { DrizzleD1Database } from "drizzle-orm/d1";
-import type { BunSQLite } from "@test/database-manager";
+import type { BunSQLite } from "@test/index";
 
 /**
  * NOTE: Workersの環境変数の設定場所

@@ -1,8 +1,8 @@
 import { or, count, desc, eq, sql } from "drizzle-orm";
-import { posts } from "@src/schema";
-import { splitArray } from "@src/modules";
-import type { Database, CloudflareD1 } from "@src/types";
-import type { Post } from "@src/schema/types";
+import { posts } from "@schema";
+import { splitArray } from "@modules";
+import type { Database, CloudflareD1 } from "@types";
+import type { Post } from "@schema/types";
 
 interface RetriveSelecter {
 	medium: Post["media"][] | undefined;

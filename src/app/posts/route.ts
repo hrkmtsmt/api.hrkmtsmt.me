@@ -1,11 +1,11 @@
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { drizzle } from "drizzle-orm/d1";
-import { Logger, Pagination, MediaSelecter } from "@src/modules";
-import { Post } from "@src/schema/types";
+import { Logger, Pagination, MediaSelecter } from "@modules";
 import { PostService } from "./service";
-import type { Env } from "@src/types";
 import type { BlankSchema } from "hono/types";
+import type { Env } from "@types";
+import type { Post } from "@schema/types";
 
 export const posts = new Hono<Env, BlankSchema, "/">().get(
 	"/posts",
