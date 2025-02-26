@@ -1,5 +1,4 @@
-import { describe, test, expect, mock } from "bun:test";
-import { drizzle } from "drizzle-orm/bun-sqlite";
+import { describe, test, expect } from "bun:test";
 import { TestManager } from "@test/index";
 import { posts } from "./route";
 import { PostService } from "./service";
@@ -44,10 +43,6 @@ const data: Post[] = [
 		publishedAt: new Date("2021-01-01T00:00:00.000Z"),
 	},
 ];
-
-mock.module("drizzle-orm/d1", () => {
-	return { drizzle };
-});
 
 describe("route /posts", () => {
 	describe("GET /posts", () => {
