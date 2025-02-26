@@ -6,9 +6,9 @@ import type { ExportedHandlerScheduledHandler } from "@cloudflare/workers-types"
 import type { Env } from "@types";
 import type { Post } from "@schema/types";
 
-export const scheduled: ExportedHandlerScheduledHandler<
-	Env["Bindings"]
-> = async (_, env, context) => {
+type Scheduled = ExportedHandlerScheduledHandler<Env["Bindings"]>;
+
+export const scheduled: Scheduled = async (_, env, context) => {
 	context.waitUntil(
 		(async () => {
 			try {
@@ -32,15 +32,13 @@ export const scheduled: ExportedHandlerScheduledHandler<
 					api.sizu.articles.get(),
 				]);
 
-				const createdAt = new Date();
-
 				const z = zenn.articles.map<Post>((p) => {
 					return {
 						slug: p.slug,
 						media: "zenn" as const,
 						title: p.title,
 						url: `${env.ZENN_BASE_URL}${p.path}`,
-						createdAt,
+						createdAt: new Date(p.publishedAt),
 						publishedAt: new Date(p.bodyUpdatedAt),
 					};
 				});
@@ -51,7 +49,7 @@ export const scheduled: ExportedHandlerScheduledHandler<
 						media: "qiita" as const,
 						title: p.title,
 						url: p.url,
-						createdAt,
+						createdAt: new Date(p.createdAt),
 						publishedAt: new Date(p.updatedAt),
 					};
 				});
@@ -64,7 +62,7 @@ export const scheduled: ExportedHandlerScheduledHandler<
 							media: "sizu" as const,
 							title: p.title,
 							url: `${env.SIZU_BASE_URL}/hrkmtsmt/posts/${p.slug}`,
-							createdAt,
+							createdAt: new Date(p.createdAt),
 							publishedAt: new Date(p.updatedAt),
 						};
 					});
