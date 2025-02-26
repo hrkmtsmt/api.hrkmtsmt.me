@@ -16,11 +16,10 @@ export const posts = new Hono<Env, BlankSchema, "/">().get(
 			const offset = page - 1;
 			const secret = c.req.query("secret")?.toLowerCase() === "true";
 			const media = c.req.query("media") as Post["media"] | undefined;
-
-			const service = new PostService(drizzle(c.env.DB));
 			const selecter = new MediaSelecter(media, secret);
 			const medium = selecter.value === "all" ? undefined : selecter.value;
 
+			const service = new PostService(drizzle(c.env.DB));
 			const [data, total] = await Promise.all([
 				service.retrive({ medium, limit, offset: offset * limit }),
 				service.count({ medium }),
@@ -30,6 +29,10 @@ export const posts = new Hono<Env, BlankSchema, "/">().get(
 			return c.json({ data, pages, next }, 200);
 		} catch (error: unknown) {
 			Logger.error(error);
+			if (error instanceof Error) {
+				throw new HTTPException(422, { message: error.message });
+			}
+
 			throw new HTTPException(500, { message: "Failed to fetch posts." });
 		}
 	},

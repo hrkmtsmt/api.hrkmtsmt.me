@@ -13,7 +13,7 @@
 		"spell-check": "cspell '**'",
 		"migrate": "bun run drizzle-kit migrate",
 		"migrate:generate": "bun run drizzle-kit generate",
-		"test": "bun run test:migrate && bun test && rm -rf test/db.sqlite",
+		"test": "bun run test:migrate && bun test",
 		"test:migrate": "bun run drizzle-kit migrate --config=test/drizzle.config.ts"
 	},
 	"devDependencies": {
