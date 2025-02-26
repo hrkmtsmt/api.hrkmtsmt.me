@@ -1,4 +1,4 @@
-import { Client } from "@modules";
+import { Client, OAuthBuilder } from "@modules";
 import { HatenaOAuth } from "./oauth";
 import type { Env } from "@types";
 import type * as Articles from "./articles.types";
@@ -17,10 +17,13 @@ export const hatena = (env: Env["Bindings"]) => {
 	const o = new Client(env.HATENA_OAUTH_URL, {
 		"Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
 	});
+	const b = new OAuthBuilder();
+
 	return {
 		articles: articles(c),
 		oauth: new HatenaOAuth(
 			o,
+			b,
 			env.HATENA_OAUTH_URL,
 			env.SECRET_HATENA_OAUTH_CONSUMER_KEY,
 			env.SECRET_HATENA_OAUTH_CONSUMER_SECRET,

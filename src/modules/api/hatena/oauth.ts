@@ -10,6 +10,7 @@ export class HatenaOAuth {
 
 	constructor(
 		private oauth: Client,
+		private builder: OAuthBuilder,
 		private url: string,
 		private consumerKey: string,
 		private consumerSecret: string,
@@ -19,9 +20,9 @@ export class HatenaOAuth {
 		const params = {
 			oauthCallback: "http://localhost:8787/oauth/hatena/callback",
 			oauthConsumerKey: this.consumerKey,
-			oauthNonce: OAuthBuilder.nonce(),
+			oauthNonce: this.builder.nonce(),
 			oauthSignatureMethod: this.signatureMethod,
-			oauthTimestamp: OAuthBuilder.timestamp(),
+			oauthTimestamp: this.builder.timestamp(),
 			oauthVersion: this.version,
 		};
 		const endpoint = "/oauth/initiate";
@@ -32,13 +33,13 @@ export class HatenaOAuth {
 			consumerSecret: this.consumerSecret,
 			tokenSecret: "",
 		};
-		const oauthSignature = OAuthBuilder.toSignature(
+		const oauthSignature = this.builder.toSignature(
 			HTTP_METHODS.post,
 			url,
 			signatureParams,
 			signatureKeys,
 		);
-		const authorization = OAuthBuilder.toAuthorization({
+		const authorization = this.builder.toAuthorization({
 			...params,
 			oauthSignature,
 		});
@@ -70,16 +71,16 @@ export class HatenaOAuth {
 	) {
 		const params = {
 			oauthConsumerKey: this.consumerKey,
-			oauthNonce: OAuthBuilder.nonce(),
+			oauthNonce: this.builder.nonce(),
 			oauthSignature_method: this.signatureMethod,
-			oauthTimestamp: OAuthBuilder.timestamp(),
+			oauthTimestamp: this.builder.timestamp(),
 			oauthToken: requestToken,
 			oauthVerifier: verifier,
 			oauthVersion: this.version,
 		};
 		const endpoint = "/oauth/token";
 		const url = `${this.url}${endpoint}`;
-		const oauthSignature = OAuthBuilder.toSignature(
+		const oauthSignature = this.builder.toSignature(
 			HTTP_METHODS.post,
 			url,
 			params,
@@ -88,7 +89,7 @@ export class HatenaOAuth {
 				tokenSecret: requestTokenSecret,
 			},
 		);
-		const authorization = OAuthBuilder.toAuthorization({
+		const authorization = this.builder.toAuthorization({
 			...params,
 			oauthSignature,
 		});
@@ -119,17 +120,17 @@ export class HatenaOAuth {
 	) {
 		const params = {
 			oauthConsumerKey: consumerKey,
-			oauthNonce: OAuthBuilder.nonce(),
+			oauthNonce: this.builder.nonce(),
 			oauthSignatureMethod: "HMAC-SHA1",
-			oauthTimestamp: OAuthBuilder.timestamp(),
+			oauthTimestamp: this.builder.timestamp(),
 			oauthToken: accessToken,
 			oauthVersion: "1.0",
 		};
-		const oauthSignature = OAuthBuilder.toSignature(method, url, params, {
+		const oauthSignature = this.builder.toSignature(method, url, params, {
 			consumerSecret,
 			tokenSecret: accessTokenSecret,
 		});
 
-		return OAuthBuilder.toAuthorization({ ...params, oauthSignature });
+		return this.builder.toAuthorization({ ...params, oauthSignature });
 	}
 }
