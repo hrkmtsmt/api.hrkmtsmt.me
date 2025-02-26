@@ -13,7 +13,7 @@ export interface TestHonoEnv {
 	DB: SQLite;
 }
 
-export class DatabaseManager {
+export class TestManager {
 	private db: SQLite;
 
 	public readonly store: BunSQLite;

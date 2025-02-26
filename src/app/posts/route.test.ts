@@ -1,6 +1,6 @@
-import { describe, test, expect, mock, beforeEach, afterEach } from "bun:test";
+import { describe, test, expect, mock } from "bun:test";
 import { drizzle } from "drizzle-orm/bun-sqlite";
-import { DatabaseManager } from "@test/index";
+import { TestManager } from "@test/index";
 import { posts } from "./route";
 import { PostService } from "./service";
 import type { Post } from "@schema/types";
@@ -52,7 +52,7 @@ mock.module("drizzle-orm/d1", () => {
 describe("route /posts", () => {
 	describe("GET /posts", () => {
 		test("リクエストを送るとレスポンスが返ってくる", async () => {
-			const manager = new DatabaseManager();
+			const manager = new TestManager();
 			const service = new PostService(manager.store);
 			service.upsert(data);
 
@@ -94,7 +94,7 @@ describe("route /posts", () => {
 		});
 
 		test("メディアがしずかなインターネットに指定されていてシークレットモードが無効のパラメータのリクエストを送るとエラーになる", async () => {
-			const manager = new DatabaseManager();
+			const manager = new TestManager();
 			const service = new PostService(manager.store);
 			service.upsert([]);
 

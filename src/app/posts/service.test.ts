@@ -1,5 +1,5 @@
-import { test, describe, expect, afterEach } from "bun:test";
-import { DatabaseManager } from "@test/index";
+import { test, describe, expect } from "bun:test";
+import { TestManager } from "@test/index";
 import { PostService } from "./service";
 import type { Post } from "@schema/types";
 
@@ -45,7 +45,7 @@ const data: Post[] = [
 describe("PostService", () => {
 	describe("method service.upsert", () => {
 		test("入力されてデータがデータベースに保存できる", () => {
-			const db = new DatabaseManager();
+			const db = new TestManager();
 			const service = new PostService(db.store);
 
 			expect(() => service.upsert(data)).not.toThrow();
@@ -54,7 +54,7 @@ describe("PostService", () => {
 
 	describe("method service.retrive", () => {
 		test("指定したメディアの記事が取得できる", async () => {
-			const service = new PostService(new DatabaseManager().store);
+			const service = new PostService(new TestManager().store);
 			await service.upsert(data);
 
 			const result = await service.retrive({ medium: ["zenn", "sizu"] });
@@ -82,7 +82,7 @@ describe("PostService", () => {
 		});
 
 		test("指定されたメディアがない場合はすべての記事が取得できる", async () => {
-			const service = new PostService(new DatabaseManager().store);
+			const service = new PostService(new TestManager().store);
 			await service.upsert(data);
 
 			const result = await service.retrive({ medium: undefined });
@@ -130,7 +130,7 @@ describe("PostService", () => {
 
 	describe("method service.count", () => {
 		test("指定したメディアの記事の総数が取得できる", async () => {
-			const service = new PostService(new DatabaseManager().store);
+			const service = new PostService(new TestManager().store);
 			await service.upsert(data);
 
 			const result = await service.count({ medium: ["hatena", "zenn"] });
@@ -139,7 +139,7 @@ describe("PostService", () => {
 		});
 
 		test("メディアが指定されていない場合は全記事の総数が取得できる", async () => {
-			const service = new PostService(new DatabaseManager().store);
+			const service = new PostService(new TestManager().store);
 			await service.upsert(data);
 
 			const result = await service.count({ medium: undefined });
