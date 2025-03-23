@@ -1,5 +1,5 @@
 import { test, describe, expect } from "bun:test";
-import { Pagination } from ".";
+import { Pagination } from "./pagination";
 
 describe("class Pagination", () => {
 	describe("pagination.pages", () => {
