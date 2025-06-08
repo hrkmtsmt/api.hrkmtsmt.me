@@ -5,7 +5,8 @@
 	"scripts": {
 		"dev:local": "wrangler dev --env local --test-scheduled",
 		"dev:remote": "wrangler dev --remote --test-scheduled",
-		"deploy": "wrangler deploy --env production",
+		"set-secret": "bash set-secrets.sh",
+		"deploy": "bun run set-secret && wrangler deploy --env production",
 		"deploy:prod": "bun run deploy",
 		"format": "bun run biome format --write",
 		"lint": "bun run biome lint",
@@ -28,6 +29,7 @@
 	"dependencies": {
 		"camelcase-keys": "9.1.3",
 		"drizzle-orm": "0.39.3",
+		"fast-xml-parser": "^5.2.5",
 		"hono": "4.7.2",
 		"immer": "10.1.1",
 		"query-string": "9.1.1",

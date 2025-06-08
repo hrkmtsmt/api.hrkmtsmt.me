@@ -48,7 +48,8 @@ export class Client {
     if (
       type?.includes("text/plain") ||
       type?.includes("text/html") ||
-      type?.includes("application/x-www-form-urlencoded")
+      type?.includes("application/x-www-form-urlencoded") || 
+      type?.includes("application/atom")
     ) {
       return response.text() as T;
     }
