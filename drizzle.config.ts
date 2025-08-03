@@ -1,12 +1,12 @@
-import { defineConfig } from "drizzle-kit";
-import * as dotenvx from "@dotenvx/dotenvx";
 import path from "path";
+import * as dotenvx from "@dotenvx/dotenvx";
+import { defineConfig } from "drizzle-kit";
 
 dotenvx.config({
   path: path.join(__dirname, ".dev.vars"),
 });
 
-export default defineConfig({
+const production = defineConfig({
   out: "./migrations",
   schema: "./src/schema/index.ts",
   dialect: "sqlite",
@@ -17,3 +17,14 @@ export default defineConfig({
     databaseId: process.env.CLOUDFLARE_DATABASE_ID,
   },
 });
+
+const local = defineConfig({
+  out: "./migrations",
+  schema: "./src/schema/index.ts",
+  dialect: "sqlite",
+  dbCredentials: {
+    url: "db.sqlite",
+  },
+});
+
+export default process.env.ENVIRONMENT === "production" ? production : local;

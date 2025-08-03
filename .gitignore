@@ -19,4 +19,4 @@ secret.json
 
 # test
 
-test/db.sqlite
+db.sqlite
