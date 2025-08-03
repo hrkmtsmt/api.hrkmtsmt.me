@@ -1,0 +1,46 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types: [closed]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_DATABASE_ID: ${{ secrets.CLOUDFLARE_DATABASE_ID }}
+    if: github.event_name == 'push' || github.event.pull_request.merged == true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Create .dev.vars
+        run: |
+          cat << EOF > .dev.vars
+          SECRET_BASIC_AUTH_USERNAME="${{ secrets.SECRET_BASIC_AUTH_USERNAME }}"
+          SECRET_BASIC_AUTH_PASSWORD="${{ secrets.SECRET_BASIC_AUTH_PASSWORD }}"
+          SECRET_HATENA_API_KEY="${{ secrets.SECRET_HATENA_API_KEY }}"
+          SECRET_QIITA_API_ACCESS_TOKEN="${{ secrets.SECRET_QIITA_API_ACCESS_TOKEN }}"
+          SECRET_SIZU_API_KEY="${{ secrets.SECRET_SIZU_API_KEY }}"
+          EOF
+
+      - name: Run database migrations
+        run: bun run migrate
+
+      - name: Deploy to Cloudflare
+        run: bun run deploy

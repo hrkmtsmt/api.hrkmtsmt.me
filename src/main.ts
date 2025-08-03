@@ -27,7 +27,7 @@ const app = new Hono<Env, BlankSchema, "/">()
 
     return basicAuth({
       username: c.env.SECRET_BASIC_AUTH_USERNAME,
-      password: c.env.SECRET_BASIC_AUTH_PASWORD,
+      password: c.env.SECRET_BASIC_AUTH_PASSWORD,
     })(c, next);
   })
   .route("/", handlers.oauth)
@@ -35,6 +35,7 @@ const app = new Hono<Env, BlankSchema, "/">()
   .route("/", handlers.posts);
 
 export default {
+  port: 8787,
   fetch: app.fetch,
   scheduled,
 };
