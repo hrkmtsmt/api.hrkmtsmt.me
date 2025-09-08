@@ -1,6 +1,5 @@
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { drizzle } from "drizzle-orm/d1";
 import { Logger } from "@modules";
 import { Pagination, MediaSelecter } from "@core";
 import { PostService } from "./service";
@@ -14,15 +13,15 @@ export const posts = new Hono<Env, BlankSchema, "/">().get(
     try {
       const limit = Number(c.req.query("limit")) || 12;
       const page = Number(c.req.query("page")) || 1;
-      const offset = page - 1;
+      const offset = (page - 1) * limit;
       const secret = c.req.query("secret")?.toLowerCase() === "true";
       const media = c.req.query("media") as Post["media"] | undefined;
       const selecter = new MediaSelecter(media, secret);
       const medium = selecter.value === "all" ? undefined : selecter.value;
 
-      const service = new PostService(drizzle(c.env.DB));
+      const service = new PostService(c.var.db);
       const [data, total] = await Promise.all([
-        service.retrive({ medium, limit, offset: offset * limit }),
+        service.list({ medium, limit, offset }),
         service.count({ medium }),
       ]);
       const { pages, next } = new Pagination(total, limit, page);

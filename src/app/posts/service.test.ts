@@ -4,147 +4,147 @@ import { PostService } from "./service";
 import type { Post } from "@schema/types";
 
 const data: Post[] = [
-	{
-		id: 1,
-		slug: "a",
-		media: "zenn",
-		title: "Zenn article A",
-		url: "https://example.com/articles/zenn/A",
-		createdAt: new Date("2021-01-01T00:00:00.000Z"),
-		publishedAt: new Date("2021-01-01T00:00:00.000Z"),
-	},
-	{
-		id: 2,
-		slug: "b",
-		media: "qiita",
-		title: "Qiita article B",
-		url: "https://example.com/articles/qiita/A",
-		createdAt: new Date("2021-01-01T00:00:00.000Z"),
-		publishedAt: new Date("2021-01-01T00:00:00.000Z"),
-	},
-	{
-		id: 3,
-		slug: "c",
-		media: "sizu",
-		title: "Sizu article C",
-		url: "https://example.com/articles/sizu/C",
-		createdAt: new Date("2021-01-01T00:00:00.000Z"),
-		publishedAt: new Date("2021-01-01T00:00:00.000Z"),
-	},
-	{
-		id: 4,
-		slug: "d",
-		media: "hatena",
-		title: "hatena article D",
-		url: "https://example.com/articles/hatena/D",
-		createdAt: new Date("2021-01-01T00:00:00.000Z"),
-		publishedAt: new Date("2021-01-01T00:00:00.000Z"),
-	},
+  {
+    id: 1,
+    slug: "a",
+    media: "zenn",
+    title: "Zenn article A",
+    url: "https://example.com/articles/zenn/A",
+    createdAt: new Date("2021-01-01T00:00:00.000Z"),
+    publishedAt: new Date("2021-01-01T00:00:00.000Z"),
+  },
+  {
+    id: 2,
+    slug: "b",
+    media: "qiita",
+    title: "Qiita article B",
+    url: "https://example.com/articles/qiita/A",
+    createdAt: new Date("2021-01-01T00:00:00.000Z"),
+    publishedAt: new Date("2021-01-01T00:00:00.000Z"),
+  },
+  {
+    id: 3,
+    slug: "c",
+    media: "sizu",
+    title: "Sizu article C",
+    url: "https://example.com/articles/sizu/C",
+    createdAt: new Date("2021-01-01T00:00:00.000Z"),
+    publishedAt: new Date("2021-01-01T00:00:00.000Z"),
+  },
+  {
+    id: 4,
+    slug: "d",
+    media: "hatena",
+    title: "hatena article D",
+    url: "https://example.com/articles/hatena/D",
+    createdAt: new Date("2021-01-01T00:00:00.000Z"),
+    publishedAt: new Date("2021-01-01T00:00:00.000Z"),
+  },
 ];
 
 describe("PostService", () => {
-	describe("method service.upsert", () => {
-		test("入力されてデータがデータベースに保存できる", () => {
-			const db = new TestManager();
-			const service = new PostService(db.store);
+  describe("method service.upsert", () => {
+    test("入力されてデータがデータベースに保存できる", () => {
+      const db = new TestManager();
+      const service = new PostService(db.db);
 
-			expect(() => service.upsert(data)).not.toThrow();
-		});
-	});
+      expect(() => service.upsert(data)).not.toThrow();
+    });
+  });
 
-	describe("method service.retrive", () => {
-		test("指定したメディアの記事が取得できる", async () => {
-			const service = new PostService(new TestManager().store);
-			await service.upsert(data);
+  describe("method service.retrive", () => {
+    test("指定したメディアの記事が取得できる", async () => {
+      const service = new PostService(new TestManager().db);
+      await service.upsert(data);
 
-			const result = await service.retrive({ medium: ["zenn", "sizu"] });
+      const result = await service.list({ medium: ["zenn", "sizu"] });
 
-			expect(result).toStrictEqual([
-				{
-					id: 1,
-					slug: "a",
-					title: "Zenn article A",
-					media: "zenn",
-					url: "https://example.com/articles/zenn/A",
-					createdAt: new Date("2021-01-01T00:00:00.000Z"),
-					publishedAt: new Date("2021-01-01T00:00:00.000Z"),
-				},
-				{
-					id: 3,
-					slug: "c",
-					media: "sizu",
-					title: "Sizu article C",
-					url: "https://example.com/articles/sizu/C",
-					createdAt: new Date("2021-01-01T00:00:00.000Z"),
-					publishedAt: new Date("2021-01-01T00:00:00.000Z"),
-				},
-			]);
-		});
+      expect(result).toStrictEqual([
+        {
+          id: 1,
+          slug: "a",
+          title: "Zenn article A",
+          media: "zenn",
+          url: "https://example.com/articles/zenn/A",
+          createdAt: new Date("2021-01-01T00:00:00.000Z"),
+          publishedAt: new Date("2021-01-01T00:00:00.000Z"),
+        },
+        {
+          id: 3,
+          slug: "c",
+          media: "sizu",
+          title: "Sizu article C",
+          url: "https://example.com/articles/sizu/C",
+          createdAt: new Date("2021-01-01T00:00:00.000Z"),
+          publishedAt: new Date("2021-01-01T00:00:00.000Z"),
+        },
+      ]);
+    });
 
-		test("指定されたメディアがない場合はすべての記事が取得できる", async () => {
-			const service = new PostService(new TestManager().store);
-			await service.upsert(data);
+    test("指定されたメディアがない場合はすべての記事が取得できる", async () => {
+      const service = new PostService(new TestManager().db);
+      await service.upsert(data);
 
-			const result = await service.retrive({ medium: undefined });
+      const result = await service.list({ medium: undefined });
 
-			expect(result).toStrictEqual([
-				{
-					id: 1,
-					slug: "a",
-					media: "zenn",
-					title: "Zenn article A",
-					url: "https://example.com/articles/zenn/A",
-					createdAt: new Date("2021-01-01T00:00:00.000Z"),
-					publishedAt: new Date("2021-01-01T00:00:00.000Z"),
-				},
-				{
-					id: 2,
-					slug: "b",
-					media: "qiita",
-					title: "Qiita article B",
-					url: "https://example.com/articles/qiita/A",
-					createdAt: new Date("2021-01-01T00:00:00.000Z"),
-					publishedAt: new Date("2021-01-01T00:00:00.000Z"),
-				},
-				{
-					id: 3,
-					slug: "c",
-					media: "sizu",
-					title: "Sizu article C",
-					url: "https://example.com/articles/sizu/C",
-					createdAt: new Date("2021-01-01T00:00:00.000Z"),
-					publishedAt: new Date("2021-01-01T00:00:00.000Z"),
-				},
-				{
-					id: 4,
-					slug: "d",
-					media: "hatena",
-					title: "hatena article D",
-					url: "https://example.com/articles/hatena/D",
-					createdAt: new Date("2021-01-01T00:00:00.000Z"),
-					publishedAt: new Date("2021-01-01T00:00:00.000Z"),
-				},
-			]);
-		});
-	});
+      expect(result).toStrictEqual([
+        {
+          id: 1,
+          slug: "a",
+          media: "zenn",
+          title: "Zenn article A",
+          url: "https://example.com/articles/zenn/A",
+          createdAt: new Date("2021-01-01T00:00:00.000Z"),
+          publishedAt: new Date("2021-01-01T00:00:00.000Z"),
+        },
+        {
+          id: 2,
+          slug: "b",
+          media: "qiita",
+          title: "Qiita article B",
+          url: "https://example.com/articles/qiita/A",
+          createdAt: new Date("2021-01-01T00:00:00.000Z"),
+          publishedAt: new Date("2021-01-01T00:00:00.000Z"),
+        },
+        {
+          id: 3,
+          slug: "c",
+          media: "sizu",
+          title: "Sizu article C",
+          url: "https://example.com/articles/sizu/C",
+          createdAt: new Date("2021-01-01T00:00:00.000Z"),
+          publishedAt: new Date("2021-01-01T00:00:00.000Z"),
+        },
+        {
+          id: 4,
+          slug: "d",
+          media: "hatena",
+          title: "hatena article D",
+          url: "https://example.com/articles/hatena/D",
+          createdAt: new Date("2021-01-01T00:00:00.000Z"),
+          publishedAt: new Date("2021-01-01T00:00:00.000Z"),
+        },
+      ]);
+    });
+  });
 
-	describe("method service.count", () => {
-		test("指定したメディアの記事の総数が取得できる", async () => {
-			const service = new PostService(new TestManager().store);
-			await service.upsert(data);
+  describe("method service.count", () => {
+    test("指定したメディアの記事の総数が取得できる", async () => {
+      const service = new PostService(new TestManager().db);
+      await service.upsert(data);
 
-			const result = await service.count({ medium: ["hatena", "zenn"] });
+      const result = await service.count({ medium: ["hatena", "zenn"] });
 
-			expect(result).toBe(2);
-		});
+      expect(result).toBe(2);
+    });
 
-		test("メディアが指定されていない場合は全記事の総数が取得できる", async () => {
-			const service = new PostService(new TestManager().store);
-			await service.upsert(data);
+    test("メディアが指定されていない場合は全記事の総数が取得できる", async () => {
+      const service = new PostService(new TestManager().db);
+      await service.upsert(data);
 
-			const result = await service.count({ medium: undefined });
+      const result = await service.count({ medium: undefined });
 
-			expect(result).toBe(4);
-		});
-	});
+      expect(result).toBe(4);
+    });
+  });
 });

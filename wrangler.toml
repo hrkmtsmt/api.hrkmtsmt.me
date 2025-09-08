@@ -6,9 +6,14 @@ compatibility_flags = ["nodejs_compat"]
 workers_dev = false
 preview_urls = false
 
+[dev]
+port = 8080
+local_protocol = "http"
+
 [env.local.vars]
 ALLOW_ORIGIN = "http://localhost:3000"
 APP_URL = "http://localhost:8787"
+ENVIRONMENT = "local"
 HATENA_API_URL = "https://blog.hatena.ne.jp"
 HATENA_BASE_URL = "https://hrkmtsmt.hatenablog.com"
 HATENA_OAUTH_URL = "https://www.hatena.com"
@@ -24,6 +29,7 @@ name = "api"
 [env.production.vars]
 ALLOW_ORIGIN = "https://hrkmtsmt.me"
 APP_URL = "https://api.hrkmtsmt.me"
+ENVIRONMENT = "production"
 HATENA_API_URL = "https://blog.hatena.ne.jp"
 HATENA_BASE_URL = "https://hrkmtsmt.hatenablog.com"
 HATENA_OAUTH_URL = "https://www.hatena.com"
@@ -39,6 +45,12 @@ crons = ["0 0 * * mon"]
 
 [observability.logs]
 enabled = true
+
+[[env.local.d1_databases]]
+binding = "DB"                # i.e. available in your Worker on env.DB
+database_name = "local"
+database_id = "local"
+migrations_dir = "migrations"
 
 [[env.production.d1_databases]]
 binding = "DB"                                       # i.e. available in your Worker on env.DB
